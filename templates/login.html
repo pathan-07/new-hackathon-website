@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="auth-container">
+    <h2 class="text-center mb-4">Login</h2>
+
+    <div class="card">
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('auth.login') }}" class="needs-validation" novalidate>
+                {{ form.hidden_tag() }}
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    {{ form.email(class="form-control", id="email") }}
+                    <div class="invalid-feedback">
+                        Please enter a valid email address.
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    {{ form.password(class="form-control", id="password") }}
+                    <div class="invalid-feedback">
+                        Please enter your password.
+                    </div>
+                </div>
+
+                <div class="d-grid gap-2">
+                    {{ form.submit(class="btn btn-primary") }}
+                </div>
+            </form>
+            
+            <div class="mt-4 text-center">
+                <p class="divider-text">
+                    <span class="bg-light">OR</span>
+                </p>
+                <a href="{{ url_for('google_auth.login') }}" class="btn btn-outline-dark btn-block">
+                    <img src="https://img.icons8.com/color/16/000000/google-logo.png" class="me-2">
+                    Sign in with Google
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <p class="text-center mt-3">
+        Don't have an account? <a href="{{ url_for('auth.signup') }}">Sign up</a>
+    </p>
+</div>
+
+<style>
+    .divider-text {
+        position: relative;
+        text-align: center;
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+    .divider-text span {
+        padding: 7px;
+        position: relative;
+        z-index: 2;
+    }
+    .divider-text:after {
+        content: "";
+        position: absolute;
+        width: 100%;
+        border-bottom: 1px solid #ddd;
+        top: 55%;
+        left: 0;
+        z-index: 1;
+    }
+</style>
+{% endblock %}

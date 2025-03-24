@@ -1,0 +1,95 @@
+
+/* Modern styling with gradients and shadows */
+:root {
+  --primary-gradient: linear-gradient(135deg, #6B73FF 0%, #000DFF 100%);
+  --secondary-gradient: linear-gradient(135deg, #0061ff 0%, #60efff 100%);
+}
+
+body {
+  background-color: #f8f9fa;
+}
+
+.navbar {
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.auth-container {
+  max-width: 400px;
+  margin: 2rem auto;
+}
+
+.card {
+  border: none;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.btn-primary {
+  background: var(--primary-gradient);
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.chat-container {
+  height: 500px;
+  overflow-y: auto;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.chat-message {
+  margin: 12px;
+  padding: 12px;
+  border-radius: 12px;
+  max-width: 80%;
+}
+
+.user-message {
+  background: var(--primary-gradient);
+  color: white;
+  margin-left: auto;
+}
+
+.bot-message {
+  background: #f0f2f5;
+  color: #1a1a1a;
+}
+
+.scholarship-card {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.hero-section {
+  background: var(--secondary-gradient);
+  color: white;
+  padding: 4rem 0;
+  margin-bottom: 3rem;
+  border-radius: 0 0 2rem 2rem;
+}
+
+.form-control {
+  border-radius: 8px;
+  padding: 12px;
+  border: 1px solid #dee2e6;
+}
+
+.form-control:focus {
+  box-shadow: 0 0 0 3px rgba(107, 115, 255, 0.25);
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  margin: 20px auto;
+}

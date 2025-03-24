@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4 class="mb-0">Available Scholarships</h4>
+            </div>
+            <div class="card-body">
+                {% for scholarship in scholarships %}
+                <div class="scholarship-card card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ scholarship.title }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Amount: {{ scholarship.amount }}</h6>
+                        <p class="card-text">{{ scholarship.description }}</p>
+                        <p class="card-text"><small class="text-muted">Deadline: {{ scholarship.deadline.strftime('%B %d, %Y') }}</small></p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">Scholarship Assistant</h4>
+            </div>
+            <div class="card-body p-0">
+                <div class="chat-container" id="chat-messages">
+                    <div class="chat-message bot-message">
+                        Hello! I'm your scholarship assistant. How can I help you today?
+                    </div>
+                </div>
+                <div class="chat-input">
+                    <form id="chat-form">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="message-input" placeholder="Type your message...">
+                            <button class="btn btn-primary" type="submit">
+                                <i data-feather="send"></i>
+                            </button>
+                        </div>
+                    </form>
+                    <div class="loading-spinner text-center mt-2">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

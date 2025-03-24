@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="auth-container">
+    <h2 class="text-center mb-4">Verify Phone Number</h2>
+    
+    <div class="card">
+        <div class="card-body">
+            <p class="text-center mb-4">
+                Please enter the OTP sent to your phone number: <strong>{{ phone_number }}</strong>
+            </p>
+            <form method="POST" class="needs-validation" novalidate>
+                {{ form.hidden_tag() }}
+                <div class="mb-3">
+                    <label for="phone_otp" class="form-label">OTP Code</label>
+                    {{ form.phone_otp(class="form-control", id="phone_otp", placeholder="Enter 6-digit OTP") }}
+                    <div class="invalid-feedback">
+                        Please enter the OTP code.
+                    </div>
+                </div>
+
+                <div class="d-grid">
+                    {{ form.submit(class="btn btn-primary") }}
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <p class="text-center mt-3">
+        Didn't receive the code? <a href="{{ url_for('auth.resend_phone_otp', phone_number=phone_number) }}">Try again</a>
+    </p>
+</div>
+{% endblock %}
