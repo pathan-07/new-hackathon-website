@@ -20,3 +20,9 @@ def dashboard():
     # Get all scholarships from the database
     scholarships = Scholarship.query.order_by(Scholarship.created_at.desc()).all()
     return render_template('dashboard.html', scholarships=scholarships)
+
+@routes.route('/scholarship/<int:scholarship_id>')
+@login_required
+def scholarship_details(scholarship_id):
+    scholarship = Scholarship.query.get_or_404(scholarship_id)
+    return render_template('scholarship_details.html', scholarship=scholarship)
