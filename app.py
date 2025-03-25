@@ -107,11 +107,6 @@ with app.app_context():
                     amount="₹5,000 - ₹7,000 monthly",
                     eligibility="Students in Class 11, 12 and First Year BSc/Integrated MSc, minimum 75% marks"
                 )
-                    description="Promoting diversity and inclusion in higher education.",
-                    deadline=datetime.utcnow() + timedelta(days=45),
-                    amount="$4,000",
-                    eligibility="All students promoting diversity initiatives"
-                )
             ]
 
             for scholarship in sample_scholarships:
