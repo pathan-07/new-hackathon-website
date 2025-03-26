@@ -25,10 +25,11 @@ def get_redirect_url():
     return request.host_url.rstrip('/') + '/google_login/callback'
 
 # Setup instructions for users
-print(f"""To make Google authentication work:
+print("""To make Google authentication work:
 1. Go to https://console.cloud.google.com/apis/credentials
 2. Create a new OAuth 2.0 Client ID
-3. Add {DEV_REDIRECT_URL} to Authorized redirect URIs
+3. Add your Replit domain + '/google_login/callback' to Authorized redirect URIs
+   (e.g., https://your-repl-name.your-username.repl.co/google_login/callback)
 
 For detailed instructions, see:
 https://docs.replit.com/additional-resources/google-auth-in-flask#set-up-your-oauth-app--client
