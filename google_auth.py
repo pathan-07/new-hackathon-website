@@ -2,7 +2,7 @@ import json
 import os
 import requests
 from app import db
-from flask import Blueprint, redirect, request, url_for, session
+from flask import Blueprint, redirect, request, url_for, session, flash
 from flask_login import login_required, login_user, logout_user
 from models import User
 from oauthlib.oauth2 import WebApplicationClient
@@ -10,9 +10,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-CLIENT_ID = os.environ.get(
-    '18500765815-521vqjpoirqfrf4vce902pf7h2kbv2l6.apps.googleusercontent.com')
-CLIENT_SECRET = os.environ.get('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')
+CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID')
+CLIENT_SECRET = os.environ.get('GOOGLE_CLIENT_SECRET')
 
 if not CLIENT_ID or not CLIENT_SECRET:
     print(
