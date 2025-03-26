@@ -10,19 +10,24 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID')
-CLIENT_SECRET = os.environ.get('GOOGLE_CLIENT_SECRET')
+CLIENT_ID = os.environ.get(
+    '18500765815-521vqjpoirqfrf4vce902pf7h2kbv2l6.apps.googleusercontent.com')
+CLIENT_SECRET = os.environ.get('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')
 
 if not CLIENT_ID or not CLIENT_SECRET:
-    print("Warning: Google OAuth credentials not set. Please set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in Secrets tab.")
+    print(
+        "Warning: Google OAuth credentials not set. Please set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in Secrets tab."
+    )
 
 GOOGLE_DISCOVERY_URL = "https://accounts.google.com/.well-known/openid-configuration"
+
 
 # Use request.host_url to dynamically get the domain
 def get_redirect_url():
     if not hasattr(request, 'host_url'):
         return None
     return request.host_url.rstrip('/') + '/google_login/callback'
+
 
 # Setup instructions for users
 print("""To make Google authentication work:
@@ -39,16 +44,17 @@ client = WebApplicationClient(CLIENT_ID)
 
 google_auth = Blueprint("google_auth", __name__)
 
+
 @google_auth.route("/google_login")
 def login():
     if not CLIENT_ID or not CLIENT_SECRET:
         flash("Google login is not configured. Please contact administrator.")
         return redirect(url_for('auth.login'))
-        
+
     try:
         google_provider_cfg = requests.get(GOOGLE_DISCOVERY_URL).json()
         authorization_endpoint = google_provider_cfg["authorization_endpoint"]
-        
+
         redirect_uri = get_redirect_url()
         if not redirect_uri:
             flash("Could not determine callback URL")
@@ -64,6 +70,7 @@ def login():
         print(f"Error during Google login preparation: {str(e)}")
         flash("Failed to initialize Google login. Please try again.")
         return redirect(url_for('auth.login'))
+
 
 @google_auth.route("/google_login/callback")
 def callback():
@@ -114,6 +121,7 @@ def callback():
 
     except Exception as e:
         return f"Error during Google authentication: {str(e)}", 400
+
 
 @google_auth.route("/google_logout")
 @login_required
