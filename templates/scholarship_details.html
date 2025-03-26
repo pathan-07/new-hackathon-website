@@ -1,0 +1,49 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">{{ scholarship.title }}</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-8">
+                    <h4 class="text-primary mb-3">Scholarship Details</h4>
+                    <p class="lead">{{ scholarship.description }}</p>
+                    
+                    <h5 class="mt-4">Eligibility Criteria</h5>
+                    <p>{{ scholarship.eligibility }}</p>
+
+                    <h5 class="mt-4">Important Dates</h5>
+                    <ul class="list-unstyled">
+                        <li><strong>Application Deadline:</strong> {{ scholarship.deadline.strftime('%B %d, %Y') }}</li>
+                    </ul>
+
+                    <h5 class="mt-4">Award Amount</h5>
+                    <p class="h4 text-success">{{ scholarship.amount }}</p>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Quick Information</h5>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="fas fa-calendar text-primary"></i> Deadline: {{ scholarship.deadline.strftime('%B %d, %Y') }}</li>
+                                <li class="mb-2"><i class="fas fa-rupee-sign text-success"></i> Amount: {{ scholarship.amount }}</li>
+                                <li><i class="fas fa-clock text-info"></i> Posted: {{ scholarship.created_at.strftime('%B %d, %Y') }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <a href="#" class="btn btn-primary">Apply Now</a>
+                        <a href="{{ url_for('routes.dashboard') }}" class="btn btn-outline-secondary">Back to Scholarships</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

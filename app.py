@@ -80,25 +80,32 @@ with app.app_context():
         if Scholarship.query.count() == 0:
             sample_scholarships = [
                 Scholarship(
-                    title="STEM Excellence Scholarship",
-                    description="For outstanding students pursuing degrees in Science, Technology, Engineering, or Mathematics.",
-                    deadline=datetime.utcnow() + timedelta(days=30),
-                    amount="$5,000",
-                    eligibility="Undergraduate STEM students with GPA 3.5+"
+                    title="National Scholarship Portal (NSP)",
+                    description="A central government scholarship scheme for students from minority communities and economically weaker sections. Covers pre-matric, post-matric, and merit-cum-means based scholarship programs.",
+                    deadline=datetime.utcnow() + timedelta(days=90),
+                    amount="₹5,000 - ₹100,000 per annum",
+                    eligibility="Family income less than ₹2.5 lakhs per annum, minimum 50% marks in previous examination"
                 ),
                 Scholarship(
-                    title="Future Leaders Grant",
-                    description="Supporting students who demonstrate exceptional leadership qualities in their communities.",
+                    title="AICTE Pragati Scholarship",
+                    description="Scholarship scheme by AICTE for girl students in technical education. Aims to promote technical education among females and provide financial support.",
                     deadline=datetime.utcnow() + timedelta(days=60),
-                    amount="$3,000",
-                    eligibility="All undergraduate students with leadership experience"
+                    amount="₹50,000 per annum",
+                    eligibility="Girl students admitted to AICTE approved institutions, family income less than ₹8 lakhs per annum"
                 ),
                 Scholarship(
-                    title="Global Diversity Scholarship",
-                    description="Promoting diversity and inclusion in higher education.",
+                    title="Prime Minister's Scholarship Scheme",
+                    description="Special scholarship for Central Armed Police Forces and State Police Personnel wards. Supports professional and technical programs at graduate level.",
                     deadline=datetime.utcnow() + timedelta(days=45),
-                    amount="$4,000",
-                    eligibility="All students promoting diversity initiatives"
+                    amount="₹36,000 per annum",
+                    eligibility="Wards of serving/retired CAPF & Assam Rifles personnel"
+                ),
+                Scholarship(
+                    title="Kishore Vaigyanik Protsahan Yojana (KVPY)",
+                    description="Fellowship program to encourage students to pursue research careers in basic sciences. Provides monthly stipend and annual contingency grant.",
+                    deadline=datetime.utcnow() + timedelta(days=75),
+                    amount="₹5,000 - ₹7,000 monthly",
+                    eligibility="Students in Class 11, 12 and First Year BSc/Integrated MSc, minimum 75% marks"
                 )
             ]
 

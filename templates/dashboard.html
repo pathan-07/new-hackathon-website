@@ -1,3 +1,4 @@
+
 {% extends "base.html" %}
 
 {% block content %}
@@ -5,7 +6,7 @@
     <div class="col-md-8">
         <div class="card mb-4">
             <div class="card-header">
-                <h4 class="mb-0">Available Scholarships</h4>
+                <h4 class="mb-0">Available Scholarships in India</h4>
             </div>
             <div class="card-body">
                 {% for scholarship in scholarships %}
@@ -13,8 +14,11 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ scholarship.title }}</h5>
                         <h6 class="card-subtitle mb-2 text-muted">Amount: {{ scholarship.amount }}</h6>
-                        <p class="card-text">{{ scholarship.description }}</p>
-                        <p class="card-text"><small class="text-muted">Deadline: {{ scholarship.deadline.strftime('%B %d, %Y') }}</small></p>
+                        <p class="card-text">{{ scholarship.description[:200] }}...</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <p class="card-text"><small class="text-muted">Deadline: {{ scholarship.deadline.strftime('%B %d, %Y') }}</small></p>
+                            <a href="{{ url_for('routes.scholarship_details', scholarship_id=scholarship.id) }}" class="btn btn-primary">View Details</a>
+                        </div>
                     </div>
                 </div>
                 {% endfor %}
@@ -30,7 +34,7 @@
             <div class="card-body p-0">
                 <div class="chat-container" id="chat-messages">
                     <div class="chat-message bot-message">
-                        Hello! I'm your scholarship assistant. How can I help you today?
+                        Hello! I'm your scholarship assistant. How can I help you find the right scholarship in India?
                     </div>
                 </div>
                 <div class="chat-input">
@@ -42,11 +46,6 @@
                             </button>
                         </div>
                     </form>
-                    <div class="loading-spinner text-center mt-2">
-                        <div class="spinner-border text-primary" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
