@@ -13,10 +13,16 @@ load_dotenv()
 CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID')
 CLIENT_SECRET = os.environ.get('GOOGLE_CLIENT_SECRET')
 
+if not CLIENT_ID or not CLIENT_SECRET:
+    print("Warning: Google OAuth credentials not set. Please set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in Secrets tab.")
+
 GOOGLE_DISCOVERY_URL = "https://accounts.google.com/.well-known/openid-configuration"
 
-# Make sure to use this redirect URL. It has to match the one in the whitelist
-DEV_REDIRECT_URL = f'https://{os.environ.get("REPLIT_DEV_DOMAIN")}/google_login/callback'
+# Use request.host_url to dynamically get the domain
+def get_redirect_url():
+    if not hasattr(request, 'host_url'):
+        return None
+    return request.host_url.rstrip('/') + '/google_login/callback'
 
 # Setup instructions for users
 print(f"""To make Google authentication work:
@@ -34,19 +40,29 @@ google_auth = Blueprint("google_auth", __name__)
 
 @google_auth.route("/google_login")
 def login():
+    if not CLIENT_ID or not CLIENT_SECRET:
+        flash("Google login is not configured. Please contact administrator.")
+        return redirect(url_for('auth.login'))
+        
     try:
         google_provider_cfg = requests.get(GOOGLE_DISCOVERY_URL).json()
         authorization_endpoint = google_provider_cfg["authorization_endpoint"]
+        
+        redirect_uri = get_redirect_url()
+        if not redirect_uri:
+            flash("Could not determine callback URL")
+            return redirect(url_for('auth.login'))
 
         request_uri = client.prepare_request_uri(
             authorization_endpoint,
-            redirect_uri=request.base_url.replace("http://", "https://") + "/callback",
+            redirect_uri=redirect_uri,
             scope=["openid", "email", "profile"],
         )
         return redirect(request_uri)
     except Exception as e:
         print(f"Error during Google login preparation: {str(e)}")
-        return "Failed to initialize Google login. Please try again.", 500
+        flash("Failed to initialize Google login. Please try again.")
+        return redirect(url_for('auth.login'))
 
 @google_auth.route("/google_login/callback")
 def callback():
