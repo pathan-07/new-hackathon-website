@@ -11,14 +11,16 @@ function scrollToBottom() {
 }
 
 function appendMessage(type, content) {
+    const chatMessages = document.querySelector('.chat-container');
+    if (!chatMessages) return;
+
     const messageDiv = document.createElement('div');
     messageDiv.className = `chat-message ${type}-message`;
     messageDiv.textContent = content;
     messageDiv.style.opacity = '0';
     messageDiv.style.transform = 'translateY(20px)';
     
-    if (chatMessages) {
-        chatMessages.appendChild(messageDiv);
+    chatMessages.appendChild(messageDiv);
         
         // Trigger animation
         setTimeout(() => {
