@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 # load gemini api
 load_dotenv()
-API_KEY = "GEMINI_API_KEY"
+API_KEY = os.getenv("GEMINI_API_KEY")
 if not API_KEY:
     logger.warning("Gemini API key not found!")
 
