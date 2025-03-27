@@ -7,8 +7,10 @@ from sqlalchemy.orm import DeclarativeBase
 from flask_mail import Mail
 from datetime import datetime, timedelta
 from flask_migrate import Migrate
+from dotenv import load_dotenv
 
-# Configure logging
+load_dotenv()
+
 logging.basicConfig(level=logging.DEBUG)
 
 class Base(DeclarativeBase):
@@ -16,37 +18,30 @@ class Base(DeclarativeBase):
 
 db = SQLAlchemy(model_class=Base)
 mail = Mail()
-# Create the app
 app = Flask(__name__)
-# Generate a random secret key for each session if not set in environment
-app.secret_key = os.environ.get("SESSION_SECRET") or os.urandom(24)
-app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY") or os.urandom(24)
 
-# Configure the database
-app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL", "sqlite:///app.db")
-app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
-    "pool_recycle": 300,
-    "pool_pre_ping": True,
-}
+app.config.update(
+    SECRET_KEY=os.environ.get('SECRET_KEY'),
+    SQLALCHEMY_DATABASE_URI=os.environ.get('DATABASE_URL', 'sqlite:///app.db'),
+    SQLALCHEMY_ENGINE_OPTIONS={
+        "pool_recycle": 300,
+        "pool_pre_ping": True,
+    },
+    MAIL_SERVER='smtp.gmail.com',
+    MAIL_PORT=587,
+    MAIL_USE_TLS=True,
+    MAIL_USERNAME=os.environ.get('MAIL_USERNAME'),
+    MAIL_PASSWORD=os.environ.get('MAIL_PASSWORD')
+)
 
-# Configure mail settings
-app.config['MAIL_SERVER'] = 'pathanfaizan0712@gmail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')
-app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
-
-# Initialize extensions
 db.init_app(app)
 mail.init_app(app)
 migrate = Migrate(app, db)
 
-# Configure login manager
 login_manager = LoginManager()
 login_manager.login_view = 'auth.login'
 login_manager.init_app(app)
 
-# Import routes after app creation to avoid circular imports
 from models import User, Scholarship
 from auth import auth as auth_blueprint
 from google_auth import google_auth as google_auth_blueprint
@@ -57,13 +52,11 @@ from chatbot import chatbot as chatbot_blueprint
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-# Register blueprints
 app.register_blueprint(auth_blueprint)
 app.register_blueprint(google_auth_blueprint)
 app.register_blueprint(routes_blueprint)
 app.register_blueprint(chatbot_blueprint)
 
-# Create database tables and add sample data
 with app.app_context():
     try:
         db.create_all()

@@ -1,3 +1,4 @@
+
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, Email, Length, EqualTo
@@ -21,3 +22,10 @@ class SignupForm(FlaskForm):
         ]
     )
     submit = SubmitField('Sign Up')
+
+class OTPForm(FlaskForm):
+    otp = StringField('OTP', validators=[
+        DataRequired(),
+        Length(min=6, max=6, message="OTP must be 6 digits")
+    ])
+    submit = SubmitField('Verify OTP')
