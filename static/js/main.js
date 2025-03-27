@@ -1,4 +1,3 @@
-
 // Chat functionality
 const chatForm = document.getElementById('chat-form');
 const chatMessages = document.getElementById('chat-messages');
@@ -10,63 +9,50 @@ function scrollToBottom() {
     }
 }
 
-function appendMessage(type, content) {
-    const chatMessages = document.querySelector('.chat-container');
-    if (!chatMessages) return;
+// Add hover animation to cards
+document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-5px)';
+    });
 
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `chat-message ${type}-message`;
-    messageDiv.textContent = content;
-    messageDiv.style.opacity = '0';
-    messageDiv.style.transform = 'translateY(20px)';
-    
-    chatMessages.appendChild(messageDiv);
-        
-        // Trigger animation
-        setTimeout(() => {
-            messageDiv.style.transition = 'all 0.3s ease';
-            messageDiv.style.opacity = '1';
-            messageDiv.style.transform = 'translateY(0)';
-        }, 50);
-        
-        scrollToBottom();
-    }
-}
+    card.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0)';
+    });
+});
 
+// Handle chat form submission if it exists
 if (chatForm) {
     chatForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const messageInput = document.getElementById('message-input');
+        const messageInput = chatForm.querySelector('input[type="text"]');
         const message = messageInput.value.trim();
-        
-        if (!message) return;
 
-        appendMessage('user', message);
-        messageInput.value = '';
-        messageInput.focus();
+        if (message) {
+            if (loadingSpinner) loadingSpinner.style.display = 'block';
+            messageInput.value = '';
 
-        loadingSpinner.style.display = 'block';
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message })
+                });
 
-        try {
-            const response = await fetch('/api/chat', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ message }),
-            });
-
-            const data = await response.json();
-            
-            if (response.ok) {
-                appendMessage('bot', data.response);
-            } else {
-                appendMessage('bot', 'Sorry, I encountered an error. Please try again.');
+                const data = await response.json();
+                if (chatMessages) {
+                    chatMessages.innerHTML += `
+                        <div class="message user-message">${message}</div>
+                        <div class="message bot-message">${data.response}</div>
+                    `;
+                    scrollToBottom();
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            } finally {
+                if (loadingSpinner) loadingSpinner.style.display = 'none';
             }
-        } catch (error) {
-            appendMessage('bot', 'Sorry, I encountered an error. Please try again.');
-        } finally {
-            loadingSpinner.style.display = 'none';
         }
     });
 }
@@ -78,16 +64,5 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         document.querySelector(this.getAttribute('href')).scrollIntoView({
             behavior: 'smooth'
         });
-    });
-});
-
-// Add hover animation to cards
-document.querySelectorAll('.card').forEach(card => {
-    card.addEventListener('mouseenter', function() {
-        this.style.transform = 'translateY(-5px)';
-    });
-    
-    card.addEventListener('mouseleave', function() {
-        this.style.transform = 'translateY(0)';
     });
 });
