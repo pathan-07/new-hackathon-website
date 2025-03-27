@@ -19,8 +19,16 @@ def send_otp_email(email, otp):
         msg = Message('Your OTP for Verification',
                     sender=os.environ.get('MAIL_USERNAME'),
                     recipients=[email])
-        msg.body = f'Your OTP is: {otp}'
+        msg.body = f'Your OTP is: {otp}\nThis code will expire in 10 minutes.'
+        msg.html = f'''
+            <h3>Your OTP Verification Code</h3>
+            <p>Your OTP is: <strong>{otp}</strong></p>
+            <p>This code will expire in 10 minutes.</p>
+        '''
         mail.send(msg)
+        # Store OTP with timestamp
+        session['login_otp'] = otp
+        session['otp_timestamp'] = datetime.utcnow().timestamp()
         return True
     except Exception as e:
         print(f"Error sending email: {e}")
@@ -63,11 +71,19 @@ def verify_otp():
             flash('Session expired. Please login again.')
             return redirect(url_for('auth.login'))
 
+        # Check if OTP is expired (10 minutes)
+        otp_timestamp = session.get('otp_timestamp')
+        if not otp_timestamp or (datetime.utcnow().timestamp() - otp_timestamp) > 600:
+            flash('OTP has expired. Please request a new one.')
+            return redirect(url_for('auth.login'))
+
         if entered_otp == stored_otp:
             user = User.query.filter_by(email=user_email).first()
             login_user(user)
+            # Clear session data
             session.pop('login_otp', None)
             session.pop('user_email', None)
+            session.pop('otp_timestamp', None)
             return redirect(url_for('routes.dashboard'))
         else:
             flash('Invalid OTP. Please try again.')
