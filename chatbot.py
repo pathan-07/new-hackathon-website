@@ -2,6 +2,7 @@ import os
 import logging
 import google.generativeai as genai
 from flask import Blueprint, jsonify, request, session
+from dotenv import load_dotenv
 
 chatbot = Blueprint('chatbot', __name__)
 
@@ -9,8 +10,9 @@ chatbot = Blueprint('chatbot', __name__)
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Configure Gemini API
-API_KEY = "AIzaSyCtS8wqeNnA5c32DZEuIguiwKB3vF6YYnw"
+# load gemini api
+load_dotenv()
+API_KEY = "GEMINI_API_KEY"
 if not API_KEY:
     logger.warning("Gemini API key not found!")
 
@@ -32,7 +34,7 @@ try:
     ]
     
     model = genai.GenerativeModel(
-        model_name='gemini-2.0-flash',
+        model_name='gemini-1.5-flash',
         generation_config=generation_config,
         safety_settings=safety_settings
     )
